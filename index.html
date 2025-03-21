@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" >
+    <title>Currency conversion_rates</title>
+    <meta name="description" content="Currency Converter">
+    <style>
+      *,
+      ::after,
+      ::before {
+        box-sizing: border-box;
+      }
+      html {
+        font-size: 15px;
+      }
+      body {
+        font-size: 16px;
+      }
+      button {
+        cursor: pointer;
+      }
+      #amount,
+      select {
+        height: 60px;
+        width: 270px;
+        border: 2px solid rgb(28, 25, 192);
+        border-radius: 20px;
+        padding: 5px 20px;
+        font-size: 20px;
+      }
+      option {
+        font-size: 20px;
+      }
+      .container {
+        max-width: 1200px;
+        margin: auto;
+        /* background: rgb(223, 144, 26); */
+      
+       
+      }
+      .mt {
+        margin-top: 3rem;
+      }
+      .box {
+        max-width: 700px;
+ /* Ensures the box doesn't shrink too much */
+      
+        margin: auto;
+        /* text-align: center; */
+        background:radial-gradient(rgb(160, 114, 120,0.9),rgb(48, 48, 53,0.9));
+        padding: 5rem 5rem 9rem 5rem;
+        border-radius: 20px;
+        height: 30rem;
+      }
+      .row {
+        display: grid;
+        grid-template-columns: repeat(12, 1fr);gap: 2rem;
+      }
+      .col-4 {
+        grid-column: span 4;
+      }
+      .col-6{grid-column: span 6;}
+      .col-12{grid-column: span 12;}
+      @media screen and (max-width: 980px) {
+        .col-t-4 {
+          grid-column: span 4;
+        }
+        #amount,
+        select {
+          width: 200px;
+        }
+        .box{ max-width: 600px;}
+      }
+      @media screen and (max-width: 767px) {
+        .col-m-4 {
+          grid-column: span 4;
+        }
+        #amount,
+        select {
+          width: 200px;
+        }
+        .box{ max-width: 600px;}
+      }
+      @media screen and (max-width: 480px) {
+        .col-p-4 {
+          grid-column: span 4;
+        }
+        #amount,select {  width: 100px; font-size: 12px;}
+        .box {
+   /* max-width: 700px; */
+    padding:2rem 0;
+  }
+
+      }
+      h1 {
+        text-align: center;
+        color: rgb(202, 221, 204);
+      }
+      .center {
+        text-align: center;
+        /* margin-top: 5rem; */
+      }
+      .wrap-1 {
+        padding:2px;
+       text-align: center;
+        height: 100vh;
+       background: url(./images/bg.jpg) top center no-repeat ;
+       background-size: cover;
+      }
+     
+      output {
+        font-size: 30px;
+        font-weight: 700;
+      ;
+      }
+      .btn {
+        height: 60px;
+        width: 230px;
+        background-color: blue;
+        border-radius: 50px;
+        border: none;
+        font-size: 30px;
+        color: aliceblue;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap-1">
+      <h1>Currency Converter</h1>
+      <div class="container">
+        <div class="box">
+          <form name="currency">
+            <div class="row">
+              <div class="col-12 col-t-12 col-p-12">
+                <input
+                  type="number"
+                  placeholder="Enter the Amount"
+                  id="amount"
+                  required>
+              </div>
+              <div class="col-6 col-t-6 col-p-6">
+                <select id="from">
+                  <option selected disabled >--From--</option>
+                </select>
+              </div>
+              <div class="col-6 col-t-6 col-p-6">
+                <select id="to">
+                  <option selected disabled>--To--</option>
+                </select>
+              </div>
+              <div class="col-12 mt">
+                <button type="submit" class="btn">Convert</button>
+              </div>
+              <div class="col-12"><output></output></div>
+            </div>
+
+          </form>
+        </div>
+      
+      </div>
+    </div>
+    <script>
+      let arr1 = [
+        "AED",
+        "AFN",
+        "ALL",
+        "AMD",
+        "ANG",
+        "AOA",
+        "ARS",
+        "AUD",
+        "AWG",
+        "AZN",
+        "BAM",
+        "BBD",
+        "BDT",
+        "BGN",
+        "BHD",
+        "BIF",
+        "BMD",
+        "BND",
+        "BOB",
+        "BRL",
+        "BSD",
+        "BTN",
+        "BWP",
+        "BYN",
+        "BZD",
+        "CAD",
+        "CDF",
+        "CHF",
+        "CLP",
+        "CNY",
+        "COP",
+        "CRC",
+        "CUP",
+        "CVE",
+        "CZK",
+        "DJF",
+        "DKK",
+        "DOP",
+        "DZD",
+        "EGP",
+        "ERN",
+        "ETB",
+        "EUR",
+        "FJD",
+        "FKP",
+        "FOK",
+        "GBP",
+        "GEL",
+        "GGP",
+        "GHS",
+        "GIP",
+        "GMD",
+        "GNF",
+        "GTQ",
+        "GYD",
+        "HKD",
+        "HNL",
+        "HRK",
+        "HTG",
+        "HUF",
+        "IDR",
+        "ILS",
+        "IMP",
+        "INR",
+        "IQD",
+        "IRR",
+        "ISK",
+        "JEP",
+        "JMD",
+        "JOD",
+        "JPY",
+        "KES",
+        "KGS",
+        "KHR",
+        "KID",
+        "KMF",
+        "KRW",
+        "KWD",
+        "KYD",
+        "KZT",
+        "LAK",
+        "LBP",
+        "LKR",
+        "LRD",
+        "LSL",
+        "LYD",
+        "MAD",
+        "MDL",
+        "MGA",
+        "MKD",
+        "MMK",
+        "MNT",
+        "MOP",
+        "MRU",
+        "MUR",
+        "MVR",
+        "MWK",
+        "MXN",
+        "MYR",
+        "MZN",
+        "NAD",
+        "NGN",
+        "NIO",
+        "NOK",
+        "NPR",
+        "NZD",
+        "OMR",
+        "PAB",
+        "PEN",
+        "PGK",
+        "PHP",
+        "PKR",
+        "PLN",
+        "PYG",
+        "QAR",
+        "RON",
+        "RSD",
+        "RUB",
+        "RWF",
+        "SAR",
+        "SBD",
+        "SCR",
+        "SDG",
+        "SEK",
+        "SGD",
+        "SHP",
+        "SLE",
+        "SLL",
+        "SOS",
+        "SRD",
+        "SSP",
+        "STN",
+        "SYP",
+        "SZL",
+        "THB",
+        "TJS",
+        "TMT",
+        "TND",
+        "TOP",
+        "TRY",
+        "TTD",
+        "TVD",
+        "TWD",
+        "TZS",
+        "UAH",
+        "UGX",
+        "USD",
+        "UYU",
+        "UZS",
+        "VES",
+        "VND",
+        "VUV",
+        "WST",
+        "XAF",
+        "XCD",
+        "XDR",
+        "XOF",
+        "XPF",
+        "YER",
+        "ZAR",
+        "ZMW",
+        "ZWL",
+      ];
+
+      let arr2 = [
+        "AED",
+        "AFN",
+        "ALL",
+        "AMD",
+        "ANG",
+        "AOA",
+        "ARS",
+        "AUD",
+        "AWG",
+        "AZN",
+        "BAM",
+        "BBD",
+        "BDT",
+        "BGN",
+        "BHD",
+        "BIF",
+        "BMD",
+        "BND",
+        "BOB",
+        "BRL",
+        "BSD",
+        "BTN",
+        "BWP",
+        "BYN",
+        "BZD",
+        "CAD",
+        "CDF",
+        "CHF",
+        "CLP",
+        "CNY",
+        "COP",
+        "CRC",
+        "CUP",
+        "CVE",
+        "CZK",
+        "DJF",
+        "DKK",
+        "DOP",
+        "DZD",
+        "EGP",
+        "ERN",
+        "ETB",
+        "EUR",
+        "FJD",
+        "FKP",
+        "FOK",
+        "GBP",
+        "GEL",
+        "GGP",
+        "GHS",
+        "GIP",
+        "GMD",
+        "GNF",
+        "GTQ",
+        "GYD",
+        "HKD",
+        "HNL",
+        "HRK",
+        "HTG",
+        "HUF",
+        "IDR",
+        "ILS",
+        "IMP",
+        "INR",
+        "IQD",
+        "IRR",
+        "ISK",
+        "JEP",
+        "JMD",
+        "JOD",
+        "JPY",
+        "KES",
+        "KGS",
+        "KHR",
+        "KID",
+        "KMF",
+        "KRW",
+        "KWD",
+        "KYD",
+        "KZT",
+        "LAK",
+        "LBP",
+        "LKR",
+        "LRD",
+        "LSL",
+        "LYD",
+        "MAD",
+        "MDL",
+        "MGA",
+        "MKD",
+        "MMK",
+        "MNT",
+        "MOP",
+        "MRU",
+        "MUR",
+        "MVR",
+        "MWK",
+        "MXN",
+        "MYR",
+        "MZN",
+        "NAD",
+        "NGN",
+        "NIO",
+        "NOK",
+        "NPR",
+        "NZD",
+        "OMR",
+        "PAB",
+        "PEN",
+        "PGK",
+        "PHP",
+        "PKR",
+        "PLN",
+        "PYG",
+        "QAR",
+        "RON",
+        "RSD",
+        "RUB",
+        "RWF",
+        "SAR",
+        "SBD",
+        "SCR",
+        "SDG",
+        "SEK",
+        "SGD",
+        "SHP",
+        "SLE",
+        "SLL",
+        "SOS",
+        "SRD",
+        "SSP",
+        "STN",
+        "SYP",
+        "SZL",
+        "THB",
+        "TJS",
+        "TMT",
+        "TND",
+        "TOP",
+        "TRY",
+        "TTD",
+        "TVD",
+        "TWD",
+        "TZS",
+        "UAH",
+        "UGX",
+        "USD",
+        "UYU",
+        "UZS",
+        "VES",
+        "VND",
+        "VUV",
+        "WST",
+        "XAF",
+        "XCD",
+        "XDR",
+        "XOF",
+        "XPF",
+        "YER",
+        "ZAR",
+        "ZMW",
+        "ZWL",
+      ];
+
+      let a = document.getElementById("from");
+      let b = document.getElementById("to");
+
+      for (i of arr1) {
+        a.innerHTML += `<option>${i}</option>`;
+      }
+
+      let amount = document.getElementById("amount");
+      let from = document.getElementById("from");
+      let to = document.getElementById("to");
+
+      for (i in arr2) {
+        b.innerHTML += `<option>${arr2[i]}</option>`;
+      }
+
+      document.currency.addEventListener("submit", async function (e) {
+        e.preventDefault();
+        let v = Number(document.getElementById("amount").value);
+        let frmval = a.value;
+        let toval = b.value;
+        let resultDisplay = document.querySelector("output");
+        console.log(v);
+
+        if (v === "" || v <= 0) {
+          resultDisplay.innerText = "Please enter a valid amount.";
+          resultDisplay.style.color = "red";
+          return;
+        }
+        if (frmval == "--From--" || toval === "--To--") {
+          resultDisplay.innerText = "Please select both currencies.";
+          resultDisplay.style.color = "red";
+          return;
+        }
+        try {
+          resultDisplay.innerText = "";
+          console.log(frmval);
+
+          let url = `https://v6.exchangerate-api.com/v6/57a1af7d13cda4a2f555a594/latest/${frmval}`;
+          let response = await fetch(url);
+          let data = await response.json();
+          console.log(data);
+          let res = data.conversion_rates[toval];
+          console.log(res);
+          let total = v * res;
+          resultDisplay.innerText = `${v} ${frmval} = ${total} ${toval}`;
+         resultDisplay.style.color = "aliceblue";
+
+        } catch (err) {
+          console.log(err);
+          resultDisplay.innerText = "Unable to fetch data";
+        }
+      });
+    </script>
+  </body>
+</html>
